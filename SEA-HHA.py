@@ -183,22 +183,14 @@ def SurrogateEstimation(i, g, bench):
     Archive_fitness[g] = Offspring_fitness[i]
 
 
-def MSAEA(g, bench):
+def SEAHHA(g, bench):
     Archives = [LSearch, DSearch, SurrogateEstimation, Reinitialization]
     for i in range(POPULATION_SIZE):
-        Strategy = np.random.choice(Archives, p=[0.3, 0.3, 0.3, 0.1])
+        Strategy = np.random.choice(Archives, p=[0.33, 0.33, 0.33, 0.01])
         Strategy(i, g, bench)
         g += 1
     bestSelection()
     return g
-
-
-# def oneSelection():
-#     global Population, Population_fitness, Offspring, Offspring_fitness
-#     for i in range(POPULATION_SIZE):
-#         if Offspring_fitness[i] < Population_fitness[i]:
-#             Population[i] = Offspring[i]
-#             Population_fitness[i] = Offspring_fitness[i]
 
 
 def bestSelection():
@@ -213,7 +205,7 @@ def bestSelection():
         Population[i] = temp[key].copy()
 
 
-def RunMSAEA():
+def RunSEAHHA():
     global Fun_num, Population_fitness, MAX_FITNESS_EVALUATION_NUM
     All_Trial_Best = []
     All_Trial_Best_Evaluation_Num = []
@@ -226,12 +218,12 @@ def RunMSAEA():
         Best_list.append(min(Population_fitness))
         g = INITIAL_SIZE
         while g < MAX_FITNESS_EVALUATION_NUM:
-            g = MSAEA(g, bench)
+            g = SEAHHA(g, bench)
             Best_list.append(min(Population_fitness[0:g]))
         print("min: ", Best_list[-1])
         All_Trial_Best.append(Best_list)
         All_Trial_Best_Evaluation_Num.append(Best_Evaluation_Num_list)
-    np.savetxt('./MSAEA_Data/F{}_{}D.csv'.format(Fun_num, DIMENSION_NUM), All_Trial_Best, delimiter=",")
+    np.savetxt('./SEA-HHA_Data/F{}_{}D.csv'.format(Fun_num, DIMENSION_NUM), All_Trial_Best, delimiter=",")
 
 
 def main_10():
@@ -242,26 +234,12 @@ def main_10():
     Archive_solution = np.zeros((MAX_FITNESS_EVALUATION_NUM, DIMENSION_NUM))
     Offspring = np.zeros((POPULATION_SIZE, DIMENSION_NUM))
 
-    for i in range(25, 29):
-        Fun_num = i
-        RunMSAEA()
-
-
-def main_30():
-    global Fun_num, DIMENSION_NUM, Population, Population_fitness, MAX_FITNESS_EVALUATION_NUM, Archive_solution, Offspring
-
-    DIMENSION_NUM = 30
-    Population = np.zeros((POPULATION_SIZE, DIMENSION_NUM))
-    Archive_solution = np.zeros((MAX_FITNESS_EVALUATION_NUM, DIMENSION_NUM))
-    Offspring = np.zeros((POPULATION_SIZE, DIMENSION_NUM))
-
     for i in range(1, 29):
         Fun_num = i
-        RunMSAEA()
-
+        RunSEAHHA()
 
 
 if __name__ == "__main__":
-    if os.path.exists('./MSAEA_Data') == False:
-        os.makedirs('./MSAEA_Data')
+    if os.path.exists('./SEA-HHA_Data') == False:
+        os.makedirs('./SEA-HHA_Data')
     main_10()
