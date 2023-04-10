@@ -226,10 +226,10 @@ def RunSEAHHA():
     np.savetxt('./SEA-HHA_Data/F{}_{}D.csv'.format(Fun_num, DIMENSION_NUM), All_Trial_Best, delimiter=",")
 
 
-def main_10():
+def main(Dim):
     global Fun_num, DIMENSION_NUM, Population, Population_fitness, MAX_FITNESS_EVALUATION_NUM, Archive_solution, Offspring
 
-    DIMENSION_NUM = 10
+    DIMENSION_NUM = Dim
     Population = np.zeros((POPULATION_SIZE, DIMENSION_NUM))
     Archive_solution = np.zeros((MAX_FITNESS_EVALUATION_NUM, DIMENSION_NUM))
     Offspring = np.zeros((POPULATION_SIZE, DIMENSION_NUM))
@@ -242,4 +242,5 @@ def main_10():
 if __name__ == "__main__":
     if os.path.exists('./SEA-HHA_Data') == False:
         os.makedirs('./SEA-HHA_Data')
-    main_10()
+    Dim = 10
+    main(Dim)
